@@ -1,7 +1,7 @@
 pipeline {
 	agent any
     stages {
-        stage('Build') {
+		stage('Build') {
             steps {
                 powershell 'mvn -B -e -DskipTests clean package'
             }
@@ -26,6 +26,16 @@ pipeline {
 				Write-Output "Deployment completed and hosted at http://localhost:8081/$Name"
 				''')
             }
+        }
+		stage('SonarQube Analysis') {
+            steps {
+                powershell 'mvn sonar:sonar'
+            }
+        }
+    }
+	post { 
+        always { 
+            cleanWs()
         }
     }
 }
