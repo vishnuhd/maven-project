@@ -3,7 +3,7 @@ pipeline {
     stages {
 		stage('Build') {
             steps {
-                powershell 'mvn -B -e -DskipTests clean package'
+                powershell 'mvn -B -DskipTests clean package'
             }
         }
 		stage('Test') {
@@ -27,7 +27,7 @@ pipeline {
 				''')
             }
         }
-		stage('SonarQube Analysis') {
+		stage('SonarQube') {
             steps {
                 powershell 'mvn sonar:sonar'
             }
