@@ -11,7 +11,7 @@ sudo bash get-docker.sh
 docker run --rm -d -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkinsci/blueocean
 
 #Build the java project with Maven
-docker run -it --rm -v "$PWD":/app -w /app maven mvn clean install
+docker run -it --rm -v "$PWD":/app -w /app maven mvn clean install cat /logs/my-install-cmd.log
 
 #Create the docker image with Tomcat
 docker build -f Dockerfile -t hello-world:1 .
