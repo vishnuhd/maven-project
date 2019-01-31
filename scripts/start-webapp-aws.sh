@@ -8,7 +8,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo bash get-docker.sh
 
 #Run Jenkins
-docker run --rm -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkinsci/blueocean
+docker run --rm -d -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkinsci/blueocean
 
 #Build the java project with Maven
 docker run -it --rm -v "$PWD":/app -w /app maven mvn clean install
