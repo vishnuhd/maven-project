@@ -1,0 +1,55 @@
+pipeline {
+    agent {
+        docker {
+            image 'maven:3-alpine'
+            args '-v /root/.m2:/root/.m2'
+        }
+    }
+	environment {
+        IMAGE = "vishnuhdadhich/hello-world"
+        REGISTRY = "https://registry.hub.docker.com"
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Docker build') {
+            steps {
+                script {
+                    image = docker.build("${IMAGE}")
+                    println "Newly generated image, " + image.id
+                }
+            }
+        }
+		stage('Deliver') {
+            steps {
+                script {
+                    // https://hub.docker.com/r/tutum/hello-world/
+                    def container = image.run('-p 80')
+                    def contport = container.port(80)
+                    println image.id + " container is running at host port, " + contport
+                    def resp = sh(returnStdout: true,
+                                        script: """
+                                                set +x
+                                                curl -w "%{http_code}" -o /dev/null -s \
+                                                http://\"${contport}\"
+                                                """
+                                        ).trim()
+					println resp
+                }
+            }
+        }
+    }
+}
