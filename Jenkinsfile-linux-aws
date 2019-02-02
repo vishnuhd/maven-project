@@ -27,28 +27,13 @@ pipeline {
         }
         stage('Docker build') {
             steps {
-                script {
-                    image = docker.build("${IMAGE}")
-                    println "Newly generated image, " + image.id
-                }
+                sh 'docker build -f Dockerfile -t hello-world:1 .'
             }
         }
 		stage('Deliver') {
             steps {
-                script {
-                    // https://hub.docker.com/r/tutum/hello-world/
-                    def container = image.run('-p 80')
-                    def contport = container.port(80)
-                    println image.id + " container is running at host port, " + contport
-                    def resp = sh(returnStdout: true,
-                                        script: """
-                                                set +x
-                                                curl -w "%{http_code}" -o /dev/null -s \
-                                                http://\"${contport}\"
-                                                """
-                                        ).trim()
-					println resp
-                }
+				sh 'docker run --rm -d -p 80:8080 hello-world:1'
+				echo "Now you can access your web application at the following url in the browser. http://localhost:80/webapp"
             }
         }
     }
