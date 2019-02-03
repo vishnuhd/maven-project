@@ -7,12 +7,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker run -it --rm -v "$PWD":/app -w /app maven mvn -B -DskipTests clean package'
+                sh 'docker run --rm -v "$PWD":/app -w /app maven mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'docker run -it --rm -v "$PWD":/app -w /app maven mvn test'
+                sh 'docker run --rm -v "$PWD":/app -w /app maven mvn test'
             }
             post {
                 always {
