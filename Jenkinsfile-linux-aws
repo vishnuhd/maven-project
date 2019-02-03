@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
 	environment {
         IMAGE = "vishnuhdadhich/hello-world"
         REGISTRY = "https://registry.hub.docker.com"
@@ -12,12 +7,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'docker run -it --rm -v "$PWD":/app -w /app maven mvn -B -DskipTests clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'docker run -it --rm -v "$PWD":/app -w /app maven mvn test'
             }
             post {
                 always {
@@ -27,12 +22,12 @@ pipeline {
         }
         stage('Docker build') {
             steps {
-                sh 'sudo docker build -f Dockerfile -t hello-world:1 .'
+                sh 'docker build -f Dockerfile -t hello-world:1 .'
             }
         }
 		stage('Deliver') {
             steps {
-				sh 'sudo docker run --rm -d -p 80:8080 hello-world:1'
+				sh 'docker run --rm -d -p 80:8080 hello-world:1'
 				echo "Now you can access your web application at the following url in the browser. http://localhost:80/webapp"
             }
         }
