@@ -27,8 +27,11 @@ pipeline {
         }
 		stage('Deliver') {
             steps {
-				sh 'docker run --rm -d -p 80:8080 hello-world:1'
-				echo "Now you can access your web application at the following url in the browser. http://$(dig +short myip.opendns.com @resolver1.opendns.com)/webapp"
+				sh '''
+				docker run --rm -d -p 80:8080 hello-world:1
+				myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+				echo "Now you can access your web application at the following url in the browser. http://${myip}/webapp"
+				'''
             }
         }
     }
