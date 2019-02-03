@@ -28,7 +28,10 @@ pipeline {
 		stage('Deliver') {
             steps {
 				sh '''
-				docker run --rm -d -p 80:8080 hello-world:1
+				echo "Stopping the older container if it exists"
+				docker stop hello-world || true && docker rm hello-world || true
+				echo "Starting the new container"
+				docker run --rm --name hello-world -d -p 80:8080 hello-world:1
 				myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 				echo "Now you can access your web application at the following url in the browser. http://${myip}/webapp"
 				'''
