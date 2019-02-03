@@ -27,12 +27,12 @@ pipeline {
         }
         stage('Docker build') {
             steps {
-                sh 'docker build -f Dockerfile -t hello-world:1 .'
+                sh 'sudo docker build -f Dockerfile -t hello-world:1 .'
             }
         }
 		stage('Deliver') {
             steps {
-				sh 'docker run --rm -d -p 80:8080 hello-world:1'
+				sh 'sudo docker run --rm -d -p 80:8080 hello-world:1'
 				echo "Now you can access your web application at the following url in the browser. http://localhost:80/webapp"
             }
         }
