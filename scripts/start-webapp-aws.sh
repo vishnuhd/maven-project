@@ -7,7 +7,7 @@ sudo apt-get update
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo bash get-docker.sh
 sudo service docker start
-usermod -aG docker ubuntu
+sudo usermod -aG docker ubuntu
 
 #Run Jenkins
 #docker run -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkins/jenkins
@@ -23,4 +23,4 @@ sudo ufw allow 8080
 sudo ufw status
 sudo ufw allow OpenSSH
 sudo ufw enable -y
-usermod -aG docker jenkins
+sudo usermod -aG docker jenkins
