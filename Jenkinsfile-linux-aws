@@ -23,7 +23,7 @@ pipeline {
 		stage('SonarQube') {
             steps {
                 sh '''
-				docker run --rm -v "$PWD":/app -w /app maven mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Pcoverage-per-test
+				docker run --rm -v "$PWD":/app -w /app maven mvn clean -B -DskipTests org.jacoco:jacoco-maven-plugin:prepare-agent install -Pcoverage-per-test
 				docker run --rm -v "$PWD":/app -w /app maven mvn sonar:sonar
 				'''
             }
@@ -37,7 +37,7 @@ pipeline {
             steps {
 				sh '''
 				echo "Stopping the older container if it exists"
-				docker stop hello-world || true && docker rm hello-world || true
+				docker stop hello-world || true
 				echo "Starting the new container"
 				docker run --rm --name hello-world -d -p 80:8080 hello-world:1
 				myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -49,6 +49,7 @@ pipeline {
 	post { 
         always { 
             cleanWs()
+			sh 'docker image prune -a'
         }
     }
 }
