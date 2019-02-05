@@ -39,9 +39,9 @@ pipeline {
 		stage('Push to Docker Registry'){
 			steps (
 				sh '''
-				docker login -u $DOCKER_HUB_CREDS_USR -p $DOCKER_HUB_CREDS_PSW'
-				docker tag $CONTAINER_NAME:$CONTAINER_TAG $DOCKER_HUB_CREDS_USR/$CONTAINER_NAME:$CONTAINER_TAG'
-				docker push $DOCKER_HUB_CREDS_USR/$CONTAINER_NAME:$CONTAINER_TAG'
+				docker login -u $DOCKER_HUB_CREDS_USR -p $DOCKER_HUB_CREDS_PSW
+				docker tag $CONTAINER_NAME:$CONTAINER_TAG $DOCKER_HUB_CREDS_USR/$CONTAINER_NAME:$CONTAINER_TAG
+				docker push $DOCKER_HUB_CREDS_USR/$CONTAINER_NAME:$CONTAINER_TAG
 				echo "Image push complete"
 				'''
 			)			
