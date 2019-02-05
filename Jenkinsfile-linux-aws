@@ -39,6 +39,7 @@ pipeline {
 			steps {
 				withCredentials([usernamePassword(credentialsId: 'dockerhubid', passwordVariable: 'PasswordVar', usernameVariable: 'UserNameVar')]) {
 					sh '''
+					set +x
 					docker login -u $DOCKER_HUB_USER -p $PasswordVar
 					docker tag $CONTAINER_NAME:$CONTAINER_TAG $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG
 					docker push $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG
@@ -50,6 +51,7 @@ pipeline {
 		stage('Docker Run') {
             steps {
 				sh '''
+				set +x
 				echo "Stopping the older container if it exists"
 				docker stop $CONTAINER_NAME || true
 				
