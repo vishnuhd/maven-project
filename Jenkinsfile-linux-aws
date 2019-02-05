@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker run --rm -v "$PWD":/app -w /app maven mvn -B -DskipTests clean package'
+                sh 'docker run --rm -v "$PWD":/app -w /app maven mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Pcoverage-per-test'
             }
         }
         stage('Test') {
@@ -22,8 +22,7 @@ pipeline {
         }
 		stage('SonarQube') {
             steps {
-                sh '''
-				docker run --rm -v "$PWD":/app -w /app maven mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Pcoverage-per-test
+                sh '''				
 				docker run --rm -v "$PWD":/app -w /app maven mvn sonar:sonar
 				'''
             }
