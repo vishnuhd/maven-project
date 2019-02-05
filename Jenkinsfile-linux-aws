@@ -47,7 +47,7 @@ pipeline {
 				}
 			}
 		}
-		stage('Deliver') {
+		stage('Docker Run') {
             steps {
 				sh '''
 				echo "Stopping the older container if it exists"
