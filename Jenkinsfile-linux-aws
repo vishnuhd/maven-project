@@ -6,7 +6,6 @@ pipeline {
 		CONTAINER_TAG="latest"
 		DOCKER_HUB_USER="vishnuhdadhich"
 		HTTP_PORT="80"
-		DOCKER_HUB_CREDS = credentials('dockerhubid')
     }
     stages {
         stage('Build') {
@@ -36,17 +35,28 @@ pipeline {
                 sh 'docker build -f Dockerfile -t $CONTAINER_NAME:$CONTAINER_TAG .'
             }
         }
-		
+		stage('Docker Push'){
+			steps {
+				withCredentials([usernamePassword(credentialsId: 'dockerhubid', passwordVariable: 'PasswordVar', usernameVariable: 'UserNameVar')]) {
+					sh '''
+					docker login -u $DOCKER_HUB_USER -p $PasswordVar
+					docker tag $CONTAINER_NAME:$CONTAINER_TAG $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG
+					docker push $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG
+					echo "Image push complete"
+					'''
+				}
+			}
+		}
 		stage('Deliver') {
             steps {
 				sh '''
 				echo "Stopping the older container if it exists"
-				docker stop CONTAINER_NAME || true
+				docker stop $CONTAINER_NAME || true
 				
 				echo "Starting the new container"
 				
-				sh "docker pull $DOCKER_HUB_USER/$CONTAINER_NAME"
-				sh "docker run -d --rm -p $HTTP_PORT:8080 --name $CONTAINER_NAME $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG"
+				docker pull $DOCKER_HUB_USER/$CONTAINER_NAME
+				docker run -d --rm -p $HTTP_PORT:8080 --name $CONTAINER_NAME $DOCKER_HUB_USER/$CONTAINER_NAME:$CONTAINER_TAG
 				echo "Application started on port: ${HTTP_PORT} (http)"
 				#docker run --rm --name hello-world -d -p 80:8080 hello-world:1
 				
