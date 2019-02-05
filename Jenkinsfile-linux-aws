@@ -20,6 +20,14 @@ pipeline {
                 }
             }
         }
+		stage('SonarQube') {
+            steps {
+                sh '''
+				docker run --rm -v "$PWD":/app -w /app maven mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Pcoverage-per-test
+				docker run --rm -v "$PWD":/app -w /app maven mvn sonar:sonar
+				'''
+            }
+        }
         stage('Docker build') {
             steps {
                 sh 'docker build -f Dockerfile -t hello-world:1 .'
