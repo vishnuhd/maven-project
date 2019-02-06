@@ -14,7 +14,7 @@
   <properties>
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
-	<sonar.host.url>http://ip172-18-0-48-bhd8vhspkul0009cmnb0-9000.direct.labs.play-with-docker.com</sonar.host.url>
+	<sonar.host.url>http://ip172-18-0-62-bhdb9jb0mkfg00f3eg5g-9000.direct.labs.play-with-docker.com</sonar.host.url>
   </properties>
 
   <modules>
