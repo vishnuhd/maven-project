@@ -69,8 +69,7 @@ pipeline {
         }
 	stage('Automated Test') {
             steps {
-	        myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
-                sh 'curl http://${myip}/webapp .'
+                sh 'curl http://3.81.35.82:80/webapp .'
             }
         }
     }
