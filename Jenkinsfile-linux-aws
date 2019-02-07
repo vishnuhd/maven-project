@@ -67,6 +67,11 @@ pipeline {
 				''' 
             }
         }
+	stage('Automated Test') {
+            steps {
+                sh 'curl http://${myip}/webapp .'
+            }
+        }
     }
 	post { 
         always { 
