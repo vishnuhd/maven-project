@@ -69,7 +69,7 @@ pipeline {
         }
 	stage('Automation test') {
             steps {
-                sudo curl http://3.81.35.82/webapp
+                     sudo curl http://3.81.35.82/webapp
             }
         }
     }
