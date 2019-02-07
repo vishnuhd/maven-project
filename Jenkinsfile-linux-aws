@@ -67,11 +67,6 @@ pipeline {
 				''' 
             }
         }
-	stage('Automation test') {
-            steps {
-                     sudo curl http://3.81.35.82/webapp
-            }
-        }
     }
 	post { 
         always { 
