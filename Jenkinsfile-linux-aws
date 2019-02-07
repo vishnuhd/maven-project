@@ -64,7 +64,12 @@ pipeline {
 				
 				myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 				echo "Web application started at the following url : http://${myip}/webapp"
-				'''
+				''' 
+            }
+        }
+	stage('Automation test') {
+            steps {
+                sudo curl http://3.81.35.82/webapp
             }
         }
     }
