@@ -80,14 +80,16 @@ pipeline {
 		steps {
 			node('k8-master') {
 				sh '''
+				set +x
 				echo "Deleting the older deployment if it exists"
 				kubectl delete deploy/hello-world svc/hello-world || true
 				sleep 10
 				echo "Creating the new deployment and svc"
 				kubectl create -f https://raw.githubusercontent.com/vishnuhd/maven-project/master/main.yaml
 				sleep 10
-				kubectl get svc
-				echo "Web application started"
+				myip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+				port="$(kubectl get svc hello-world | awk '{print $5}' | awk '{if(NR>1)print}' | cut -c 6-10)"
+				echo "Web application started at the following url : http://${myip}:${port}/webapp"
 				'''
 				}
 			}
