@@ -77,23 +77,24 @@ pipeline {
         }
 	*/
 	stage('K8 Deployment') {
-   steps {
-     node('k8-master') {
-       sh '''
-       echo "Deleting the older deployment if it exists"
-       kubectl delete deploy/hello-world svc/hello-world || true
-       sleep 10
-       echo "Creating the new deployment and svc"
-       kubectl create -f main.yaml
-       sleep 10
-       kubectl get svc
-       echo "Web application started"
-       '''
-     }
-  }
-    }
-	post { 
-        always { 
+		steps {
+			node('k8-master') {
+				sh '''
+				echo "Deleting the older deployment if it exists"
+				kubectl delete deploy/hello-world svc/hello-world || true
+				sleep 10
+				echo "Creating the new deployment and svc"
+				kubectl create -f main.yaml
+				sleep 10
+				kubectl get svc
+				echo "Web application started"
+				'''
+				}
+			}
+		}
+	}
+	post {
+        always {
             cleanWs()
 			sh 'docker image prune -af'
         }
