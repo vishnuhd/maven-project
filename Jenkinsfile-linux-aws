@@ -23,6 +23,7 @@ pipeline {
                 }
             }
         }
+	/*
 		stage('SonarQube') {
             steps {
                 sh '''				
@@ -30,6 +31,7 @@ pipeline {
 				'''
             }
         }
+	*/
         stage('Docker build') {
             steps {
                 sh 'docker build -f Dockerfile -t $CONTAINER_NAME:$CONTAINER_TAG .'
@@ -48,6 +50,7 @@ pipeline {
 				}
 			}
 		}
+		/*
 		stage('Docker Run') {
             steps {
 				sh '''
@@ -72,6 +75,7 @@ pipeline {
                sh 'echo "Test has passed"'
             }
         }
+	*/
     }
 	post { 
         always { 
