@@ -84,7 +84,7 @@ pipeline {
 				kubectl delete deploy/hello-world svc/hello-world || true
 				sleep 10
 				echo "Creating the new deployment and svc"
-				kubectl create -f main.yaml
+				kubectl create -f https://raw.githubusercontent.com/vishnuhd/maven-project/master/main.yaml
 				sleep 10
 				kubectl get svc
 				echo "Web application started"
